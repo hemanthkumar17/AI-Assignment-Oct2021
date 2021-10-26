@@ -2,7 +2,7 @@ import random
 
   
 class Environment():
-    # The geography of the environment includes A and B positions, each having a cleaniness status: clean or dirty
+    #J The geography of the environment includes A and B positions, each having a cleaniness status: clean or dirty
     def __init__(self, location_status = None):
         if location_status == None:
             location_status = {
@@ -19,7 +19,7 @@ class Environment():
 
 
 class Bot():
-    # Simple reflex Vaccumm cleaner bot that does not have any precept history
+    #H Simple reflex Vaccumm cleaner bot that does not have any precept history
     def __init__(self, environment: Environment = None) -> None:
         self.environment = environment
         self.score = 0
@@ -37,10 +37,10 @@ class Bot():
     def move(self, direction):
         if direction == "R":
             self.action = "Move Right"
-            self.position = "B"         # If at A, simply moves right to B. If at B, bumps at the wall and stays at B
+            self.position = "B"         #K If at A, simply moves right to B. If at B, bumps at the wall and stays at B
         else:
             self.action = "Move Left"
-            self.position = "A"         # If at B, simply moves left to A. If at A, bumps at the wall and stays at A
+            self.position = "A"         #10 If at B, simply moves left to A. If at A, bumps at the wall and stays at A
     
     def moveRandomly(self):
         self.move("R" if random.randint(0, 1) == 1 else "L")
@@ -77,7 +77,7 @@ def main():
             print("Running Simulation on the environment")
             vaccummBot.runSimulation(environment = environment,initPosition = initPos)
             report.append([configuration, initPos, vaccummBot.score])
-    # Generating report for the simulations done with the bot on different configurations and initial positions
+    #04 Generating report for the simulations done with the bot on different configurations and initial positions
     print("\nTEST REPORT:")
     for env, pos, score in report:
         print("-"*50 + f"\nSimulation of Vaccumm Bot starting at {pos} on [ (Configuration) {str(env)[1:-1]} ] scored {score} performance points")
