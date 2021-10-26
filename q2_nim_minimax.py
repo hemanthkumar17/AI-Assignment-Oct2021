@@ -1,6 +1,8 @@
 from functools import cache
 from random import randint
 
+# A node class of the game, showing a particular config and possible choices
+# A bot will hold an evaluation data to check if it can win from that config or not
 class Node():
     def __init__(self, data: int, config: tuple, children: list = []):
         self.children = children
@@ -19,11 +21,11 @@ class GameTree():
         with open("output.txt", "w") as f:
             self.f = f
             self.n_stone = n_stone
-            self.winningPath = {"A": {(0, 0): None}, "B": {(0, 0): None}}
+            self.winningPath = {"A": {(0, 0): None}, "B": {(0, 0): None}}   # Contains a map of all the winning paths
             self.__WINNINGPOLICY = {"A": 1, "B": -1}
             self.playGamePaths()
         
-
+    # Displays the nim game stacks
     def displayGameTree(self, stack = None):
         if stack == None:
             stack = self.piles
@@ -32,6 +34,7 @@ class GameTree():
             print(f"|\t{'0' if stack[0] >= _currpile else ''}\t|\t{'0' if stack[1] >= _currpile else ''}\t|")
         print("="*33)
 
+    # Runs a simulation where the bot plays with another bot to map the winning path
     def playGamePaths(self, consoleOutput = False):
         self.piles = tuple([self.n_stone]*2)
         initNode = {}
@@ -51,7 +54,8 @@ class GameTree():
                         print(f"{config}: No winning path")
                     self.f.write(f"{config}: No winning Config\n")
 
-    # Creates the game tree that the bot plays with itself to figure out the winning path
+    # Creates the game tree that the bot plays with itself to figure out the winning path, recursively calling
+    # functools.cache is placed to apply dynamic programming to accomodate faster mapping (Does not have to play the same move twice)
     @cache
     def createGameTree(self, piles, player):
         nextPlayer = "A" if player == "B" else "B"      # The next player after this turn
@@ -71,14 +75,14 @@ class GameTree():
                 self.f.write(str(paths[-1]))
                 self.f.write("\nWinning Path next node: " + str(self.winningPath[nextPlayer][newPile]) + "\n" + "-"*50)
                 # If a winning path has already been found, the eval score does not need a change
-                # 
+                # If the path jus traversed is the winning path, we update the winningPath and set the data of current node
                 if evalScore != self.__WINNINGPOLICY[player] and paths[-1].data == self.__WINNINGPOLICY[player]:
                     evalScore = self.__WINNINGPOLICY[player]
                     self.winningPath[player][piles] = paths[-1]
         return Node(evalScore, (tuple(piles), player), paths)
     
-                # self.config[(tuple(piles), player)] = Node()
-
+    # The bot plays with the human via console input
+    # A coin toss decides if the human or the bot goes first
     def playWithHuman(self):
         stack = list(self.piles)
         currPlayer = "You" if randint(0, 1) else "Bot"
@@ -89,9 +93,9 @@ class GameTree():
                 pile, n = input("\nChoose a pile to remove from followed by the number of stones: ").split()
                 pile = int(pile) - 1
                 n = int(n)
-                if pile != 0 and pile != 1:
+                if pile != 0 and pile != 1: # Invalid pile number([1, 2] should be the only possible input of the user)
                     continue
-                if stack[pile] < n:
+                if stack[pile] < n:         # Not enough stones to remove
                     continue
                 stack[pile] -= n
                 print(f"\n{currPlayer} removed {n} stones from the pile {pile}\n")
@@ -113,8 +117,8 @@ class GameTree():
             print("You lose :( Better luck next time!")
 
 def main():
-    game = GameTree(4)
-    game.playWithHuman()
+    game = GameTree(4)      # Creates and trains the bot
+    game.playWithHuman()    # A game between the human and the bot is initiated
 
 if __name__ == "__main__":
     main()
