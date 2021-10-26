@@ -51,6 +51,7 @@ class GameTree():
                         print(f"{config}: No winning path")
                     self.f.write(f"{config}: No winning Config\n")
 
+    # Creates the game tree that the bot plays with itself to figure out the winning path
     @cache
     def createGameTree(self, piles, player):
         nextPlayer = "A" if player == "B" else "B"      # The next player after this turn
@@ -59,17 +60,19 @@ class GameTree():
         if tuple(piles) not in self.winningPath[player]:
             self.winningPath[player][piles] = None
         for pile in range(2):                           # The player picks a pile to remove stones from
-            for stones in range(1, piles[pile]+1):    # The player picks 1...leftover number of stones from the pile picked
+            for stones in range(1, piles[pile]+1):      # The player picks 1...leftover number of stones from the pile picked
                 newPile = list(piles)
                 newPile[pile] -= stones
                 newPile = tuple(newPile)
-                if newPile[0] == 0 and newPile[1] == 0:
+                if newPile[0] == 0 and newPile[1] == 0:     # If the game is over, the evaluation is done to decide who won and a leaf node is created   
                     paths.append(Node(1 if player == "A" else -1, ((0, 0), nextPlayer)))
-                else:
+                else:                                       # Plays the move to change config from piles->newPile and waits for the next player to play
                     paths.append(self.createGameTree(newPile, nextPlayer))
                 self.f.write(str(paths[-1]))
                 self.f.write("\nWinning Path next node: " + str(self.winningPath[nextPlayer][newPile]) + "\n" + "-"*50)
-                if not self.winningPath[player][piles] and evalScore != self.__WINNINGPOLICY[player] and paths[-1].data == self.__WINNINGPOLICY[player]:
+                # If a winning path has already been found, the eval score does not need a change
+                # 
+                if evalScore != self.__WINNINGPOLICY[player] and paths[-1].data == self.__WINNINGPOLICY[player]:
                     evalScore = self.__WINNINGPOLICY[player]
                     self.winningPath[player][piles] = paths[-1]
         return Node(evalScore, (tuple(piles), player), paths)
