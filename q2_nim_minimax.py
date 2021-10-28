@@ -79,6 +79,8 @@ class GameTree():
                 if evalScore != self.__WINNINGPOLICY[player] and paths[-1].data == self.__WINNINGPOLICY[player]:
                     evalScore = self.__WINNINGPOLICY[player]
                     self.winningPath[player][piles] = paths[-1]
+        if not self.winningPath[player][piles]:
+            self.winningPath[player][piles] = paths[0]
         return Node(evalScore, (tuple(piles), player), paths)
     
     # The bot plays with the human via console input
@@ -103,22 +105,53 @@ class GameTree():
             else:
                 if self.winningPath["A"][tuple(stack)]:
                     move = self.winningPath["A"][tuple(stack)].config[0]
-                    pile = 1 if self.piles[0] == move[0] else 0
+                    pile = 1 if stack[0] == move[0] else 0
                     n = stack[pile] - move[pile]
-                    stack = list(move)  
-                    print(f"\nThe {currPlayer} removed {n} stones from the pile {pile}\n")
-                    currPlayer = "You"
-                else:
-                    print("Bot Concedes !!")
-                    stack = [0, 0]
+
+                stack = list(move)  
+                print(f"\nThe {currPlayer} removed {n} stones from the pile {pile}\n")
+                currPlayer = "You"
+                    
         if currPlayer == "Bot":
             print("Congratulations!! You Win")
         else:
             print("You lose :( Better luck next time!")
+    
+    def playWithBot(self):
+        stack = list(self.piles)
+        currPlayer = "Bot1" if randint(0, 1) else "Bot2"
+        print(f"{currPlayer} won the toss!\n{currPlayer} First")
+        while stack != [0, 0]:
+            self.displayGameTree(stack)
+            if currPlayer == "Bot1":
+                move = self.winningPath["A"][tuple(stack)].config[0]
+                pile = 1 if stack[0] == move[0] else 0
+                n = stack[pile] - move[pile]
+
+                stack = list(move)  
+                print(f"\nThe {currPlayer} removed {n} stones from the pile {pile}\n")
+                currPlayer = "Bot2"
+            else:
+                move = self.winningPath["A"][tuple(stack)].config[0]
+                pile = 1 if stack[0] == move[0] else 0
+                n = stack[pile] - move[pile]
+
+                stack = list(move)  
+                print(f"\nThe {currPlayer} removed {n} stones from the pile {pile}\n")
+                currPlayer = "Bot1"
+                    
+        if currPlayer == "Bot1":
+            print("Bot1 Wins")
+        else:
+            print("Bot2 Wins")
 
 def main():
     game = GameTree(4)      # Creates and trains the bot
-    game.playWithHuman()    # A game between the human and the bot is initiated
+    p = input("Do you wanna play?(Y/N) ")
+    if p == 'Y':
+        game.playWithHuman()    # A game between the human and the bot is initiated
+    else:
+        game.playWithBot()
 
 if __name__ == "__main__":
     main()
