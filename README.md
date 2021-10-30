@@ -19,10 +19,10 @@ After a lifetime of 1000 timesteps, the agent is terminated and the performance 
 This simulation is repeated on all possible configurations to understand the performance of the agent.<br>
 <br>
 The state space graph is shown below:<br>
-![State Space Graph](/images/q1_statespacegraph.png "State Space Graph")<br>
+![State Space Graph](./images/q1_statespacegraph.png "State Space Graph")<br>
 <br>
 Configurations from the simulation run are shown below:<br>
-![Configurations](/images/ss_q1_output.png "Configurations")<br>
+![Configurations](./images/ss_q1_output.png "Configurations")<br>
 
 ## How to Use:
 Run the script using ```python .\q1_simplex_reflex_agent_simulation.py```<br>
@@ -42,16 +42,16 @@ An evaluation score is decided based on who won the game.<br>
 A map is computed from the game that the bot plays with another bot, created using the minimax algorithm with the initial evaluation score on the leaf nodes.<br>
 The bot is then able to play the game against the humans or other bots using the map.<br>
 The winning map after training over the minimax is as follows:<br>
-![Winning Map](/images/ss_q2_winningmap.png "Winning Map")<br>
+![Winning Map](./images/ss_q2_winningmap.png "Winning Map")<br>
 <br>
 The output of the bot vs bot game played is shown below:<br>
-![Bot vs Bot](/images/ss_q2_botvbot.png "Bot vs Bot")<br>
+![Bot vs Bot](./images/ss_q2_botvbot.png "Bot vs Bot")<br>
 <br>
 The output of the Human vs bot game 1 played is shown below:<br>
-![Human vs Bot](/images/ss_q2_humanvbot1.png "Human vs Bot")<br>
+![Human vs Bot](./images/ss_q2_humanvbot1.png "Human vs Bot")<br>
 <br>
 The output of the bot vs bot game 2 played is shown below:<br>
-![Human vs Bot](/images/ss_q2_humanvbot2.png "Human vs Bot")<br>
+![Human vs Bot](./images/ss_q2_humanvbot2.png "Human vs Bot")<br>
 ## How to Use:
 Run the script using ```python .\q2.py_nim_minimax.py```<br>
 Decide if a human wants to play with the bot or not<br>
