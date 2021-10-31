@@ -146,7 +146,8 @@ class GameTree():
             print("Bot2 Wins")
 
 def main():
-    game = GameTree(4)      # Creates and trains the bot
+    n_stones = int(input("Enter the number of stones: "))
+    game = GameTree(n_stones)      # Creates and trains the bot
     p = input("Do you wanna play?(Y/N) ")
     if p == 'Y':
         game.playWithHuman()    # A game between the human and the bot is initiated
